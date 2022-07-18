@@ -3,7 +3,6 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:proweb_qr/domain/attendance_api/attedance_api.dart';
 import 'package:proweb_qr/domain/json/workers_request.dart';
 import 'package:proweb_qr/domain/providers/auth_provider/auth_user_data.dart';
-import 'package:screen_brightness/screen_brightness.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -137,15 +136,27 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> genQRProweb() async {
+  Future<DateAuth> genQRProweb() async {
     final pref = await SharedPreferences.getInstance();
     // await FlutterScreenWake.setBrightness(pref.getDouble('brightness') ?? 0.0);
 
-    await ScreenBrightness()
-        .setScreenBrightness(pref.getDouble('brightness') ?? 0.0);
+    // await ScreenBrightness()
+    //     .setScreenBrightness(pref.getDouble('brightness') ?? 0.0);
+
+    final britness = pref.getDouble('brightness') ?? 0.0;
 
     final qr = await AttedanceApi.getQrCode();
 
-    return '{"id":${qr.result?.id},"time":${qr.result?.time},"status":${qr.result?.status}}';
+    final  json =
+        '{"id":${qr.result?.id},"time":${qr.result?.time},"status":${qr.result?.status}}';
+
+    return DateAuth(britness: britness, json: json);
   }
+}
+
+class DateAuth {
+  final String json;
+  final double britness;
+
+  const DateAuth({required this.britness, required this.json});
 }

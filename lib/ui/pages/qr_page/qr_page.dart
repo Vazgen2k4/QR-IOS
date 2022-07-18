@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:proweb_qr/domain/providers/auth_provider/auth_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:screen_brightness/screen_brightness.dart';
 
 class QrPage extends StatefulWidget {
   final double brightness;
@@ -19,17 +18,23 @@ class _QrPageState extends State<QrPage> {
   void action() async {
     await showDialog(
       context: context,
+      barrierColor: Colors.black,
       builder: (BuildContext context) {
         final model = context.read<AuthProvider>();
 
-        return FutureBuilder(
+        return FutureBuilder<DateAuth>(
           future: model.genQRProweb(),
-          builder: (context, AsyncSnapshot<String> snapshot) {
+          builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return Center(
-                child: QrImage(
-                  backgroundColor: Colors.white,
-                  data: snapshot.data ?? '',
+              final _br = snapshot.data?.britness ?? 0.3;
+              const _brKef = .15;
+              return Opacity(
+                opacity: _br < _brKef ? _brKef : _br,
+                child: Center(
+                  child: QrImage(
+                    backgroundColor: Colors.white,
+                    data: snapshot.data?.json ?? 'nonononon',
+                  ),
                 ),
               );
             } else {
@@ -38,8 +43,9 @@ class _QrPageState extends State<QrPage> {
           },
         );
       },
-    ).then((value) async =>
-        await ScreenBrightness().setScreenBrightness(_brightness));
+    );
+    // .then((value) async =>
+    //     await ScreenBrightness().setScreenBrightness(_brightness));
 
     HapticFeedback.heavyImpact();
     setState(() {});
@@ -53,13 +59,6 @@ class _QrPageState extends State<QrPage> {
 
   @override
   Widget build(BuildContext context) {
-    const arrowWidth = 50.0;
-    const arrowPercent = 16;
-
-    final arrowTop = (MediaQuery.of(context).size.height / 100) * arrowWidth;
-    final arrowLeft = MediaQuery.of(context).size.width / 2 - arrowWidth / 2;
-    final arrowHeight = MediaQuery.of(context).size.height / 100 * arrowPercent;
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -81,34 +80,19 @@ class _QrPageState extends State<QrPage> {
         onPressed: action,
         label: const Text('Генерировать'),
       ),
-      body: Stack(
-        children: [
-          const Center(
-            child: AnimatedSwitcher(
-              duration: Duration(milliseconds: 300),
-              child: Text(
-                'Для создания QR кода нажмите на кнопку',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  height: 1.15,
-                  color: Colors.white,
-                ),
-              ),
+      body: const Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Text(
+            'Для создания QR кода нажмите на кнопку "Генерировать"\n\nГенерация QR-кода нужна для того, чтобы вы могли отметиться на приход/уход в PROWEB\n\nВаши данные храняться на сервере PROWEB для проведения статистики и подсчет отработанных часов. Ваши данные могут видеть только Вы и Ваш руководитель',
+            textAlign: TextAlign.justify,
+            style: TextStyle(
+              fontSize: 20,
+              height: 1.15,
+              color: Colors.white,
             ),
           ),
-          Positioned(
-            top: arrowTop,
-            left: arrowLeft,
-            child: Image(
-              width: arrowWidth,
-              height: arrowHeight,
-              image: const AssetImage(
-                'assets/images/arrow.png',
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:proweb_qr/ui/widgets/app_menu_item/app_menu_item.dart';
-import 'package:screen_brightness/screen_brightness.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BrightnessControl extends StatefulWidget {
@@ -18,22 +17,14 @@ class BrightnessControlState extends State<BrightnessControl> {
 
   Future<void> setSettings() async {
     final pref = await SharedPreferences.getInstance();
-    deviceBritness = await ScreenBrightness().system;
     setState(() {
       value = pref.getDouble('brightness') ?? 0.0;
     });
   }
 
-  void onChanged(double curentValue) async {
-    value = curentValue;
-     ScreenBrightness().setScreenBrightness(curentValue);
-    setState(() {});
-  }
-
   void onChangedEnd(double curentValue) async {
     final pref = await SharedPreferences.getInstance();
     await pref.setDouble('brightness', curentValue);
-    await ScreenBrightness().setScreenBrightness(deviceBritness);
     setState(() {});
   }
 
@@ -66,7 +57,11 @@ class BrightnessControlState extends State<BrightnessControl> {
           min: min,
           max: max,
           onChangeEnd: onChangedEnd,
-          onChanged: onChanged,
+          onChanged: (newValue) {
+            setState(() {
+              value = newValue;
+            });
+          },
         ),
       ),
     );

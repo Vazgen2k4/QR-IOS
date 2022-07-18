@@ -6,7 +6,6 @@ import 'package:proweb_qr/ui/pages/history_page/history_page.dart';
 import 'package:proweb_qr/ui/pages/qr_page/qr_page.dart';
 import 'package:proweb_qr/ui/pages/workers_page/workers_page.dart';
 import 'package:proweb_qr/ui/widgets/app_menu/app_menu.dart';
-import 'package:screen_brightness/screen_brightness.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -20,13 +19,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late int _curentIndex;
   double brightness = 1;
-  Future<void> setCurrentBrithness() async {
-    brightness = await ScreenBrightness().current;
-  }
-
+  
   @override
   void initState() {
-    setCurrentBrithness();
     _curentIndex = 0;
     super.initState();
   }
@@ -47,7 +42,6 @@ class _HomePageState extends State<HomePage> {
       context.read<CounterProvider>().setData(choceListReset: true);
 
       setState(() {
-        ScreenBrightness().setScreenBrightness(brightness);
         _curentIndex = i;
       });
     }

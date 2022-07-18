@@ -5,8 +5,6 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - screen_brightness_ios (0.0.5):
-    - Flutter
   - secure_application (0.0.1):
     - Flutter
   - shared_preferences_ios (0.0.1):
@@ -17,7 +15,6 @@ DEPENDENCIES:
   - app_tracking_transparency (from `.symlinks/plugins/app_tracking_transparency/ios`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
-  - screen_brightness_ios (from `.symlinks/plugins/screen_brightness_ios/ios`)
   - secure_application (from `.symlinks/plugins/secure_application/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
 
@@ -32,8 +29,6 @@ EXTERNAL SOURCES:
     :path: Flutter
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
-  screen_brightness_ios:
-    :path: ".symlinks/plugins/screen_brightness_ios/ios"
   secure_application:
     :path: ".symlinks/plugins/secure_application/ios"
   shared_preferences_ios:
@@ -43,7 +38,6 @@ SPEC CHECKSUMS:
   app_tracking_transparency: 5b1745ef9ade815f7455cb6a0848349589afb7c5
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
-  screen_brightness_ios: dd110ebfe9602013ea863d59770a9192ebbb7ac7
   secure_application: 27d424e8c2e770f63e38e280b5a51f921aa9b0c8
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
