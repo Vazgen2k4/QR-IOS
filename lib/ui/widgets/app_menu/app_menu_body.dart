@@ -30,30 +30,30 @@ class AppMenuBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: ListView(
-        children: [
-          AppMenuItem(
-            icon: Icons.face,
-            title: 'Имя',
-            subtitle: subtitle(AuthUserData.data.name),
-          ),
-          const Divider(color: Color(0xff626262)),
-          AppMenuItem(
-            icon: Icons.account_circle,
-            title: 'Фамилия',
-            subtitle: subtitle(AuthUserData.data.lastName),
-          ),
-          const Divider(color: Color(0xff626262)),
-          AppMenuItem(
-            icon: Icons.work,
-            title: 'Должность ',
-            subtitle: subtitle(AuthUserData.data.position, isCapitalize: false),
-          ),
-          const Divider(color: Color(0xff626262)),
-          const BrightnessControl(),
-        ],
-      ),
+    return ListView(
+      shrinkWrap: true,
+      controller: ScrollController(),
+      children: [
+        AppMenuItem(
+          icon: Icons.face,
+          title: 'Имя',
+          subtitle: subtitle(AuthUserData.data.name),
+        ),
+        const Divider(color: Color(0xff626262)),
+        AppMenuItem(
+          icon: Icons.account_circle,
+          title: 'Фамилия',
+          subtitle: subtitle(AuthUserData.data.lastName),
+        ),
+        const Divider(color: Color(0xff626262)),
+        AppMenuItem(
+          icon: Icons.work,
+          title: 'Должность ',
+          subtitle: subtitle(AuthUserData.data.position, isCapitalize: false),
+        ),
+        const Divider(color: Color(0xff626262)),
+        if (AuthUserData.data.id != 137) const BrightnessControl(),
+      ],
     );
   }
 }

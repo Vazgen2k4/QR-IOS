@@ -3,6 +3,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:proweb_qr/domain/attendance_api/attedance_api.dart';
 import 'package:proweb_qr/domain/json/workers_request.dart';
 import 'package:proweb_qr/domain/providers/auth_provider/auth_user_data.dart';
+import 'package:proweb_qr/ui/pages/auth_page/auth_controllers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -31,8 +32,12 @@ class AuthProvider extends ChangeNotifier {
   bool _hasPermition = false;
   bool get hasPermition => _hasPermition;
 
-  void setPermition() {
-    _hasPermition = true;
+  void setPermition(bool value) async {
+    final pref = await SharedPreferences.getInstance();
+
+    await pref.setBool('-premition', value);
+
+    _hasPermition = value;
     notifyListeners();
   }
 
@@ -94,16 +99,15 @@ class AuthProvider extends ChangeNotifier {
             AuthUserData.setId(result.result?.id);
             AuthUserData.setParameters(
               AuthUserDataParameters(
-                name,
-                lastName,
-                position,
-              ),
+                  name, lastName, position, result.result?.id ?? 137),
             );
             _codeInputActive = true;
             break;
           case 423:
-          case 404:
             _isBaned = true;
+            break;
+          case 404:
+            _hasError = true;
             break;
           default:
             _hasError = true;
@@ -133,6 +137,7 @@ class AuthProvider extends ChangeNotifier {
     }
     final pref = await SharedPreferences.getInstance();
     await pref.setBool('_hasAuth', _hasAuth);
+    AuthControllers.codeController.text = '';
     notifyListeners();
   }
 
@@ -147,16 +152,21 @@ class AuthProvider extends ChangeNotifier {
 
     final qr = await AttedanceApi.getQrCode();
 
-    final  json =
+    final json =
         '{"id":${qr.result?.id},"time":${qr.result?.time},"status":${qr.result?.status}}';
 
-    return DateAuth(britness: britness, json: json);
+    return DateAuth(britness: britness, json: json, id: qr.result?.id ?? 137);
   }
 }
 
 class DateAuth {
   final String json;
   final double britness;
+  final int id;
 
-  const DateAuth({required this.britness, required this.json});
+  const DateAuth({
+    required this.britness,
+    required this.json,
+    required this.id,
+  });
 }

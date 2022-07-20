@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proweb_qr/domain/providers/auth_provider/auth_provider.dart';
@@ -6,7 +7,6 @@ import 'package:proweb_qr/ui/pages/history_page/history_page.dart';
 import 'package:proweb_qr/ui/pages/qr_page/qr_page.dart';
 import 'package:proweb_qr/ui/pages/workers_page/workers_page.dart';
 import 'package:proweb_qr/ui/widgets/app_menu/app_menu.dart';
-
 
 class HomePage extends StatefulWidget {
   final double brithess;
@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late int _curentIndex;
   double brightness = 1;
-  
+
   @override
   void initState() {
     _curentIndex = 0;
@@ -34,10 +34,10 @@ class _HomePageState extends State<HomePage> {
     List<Widget> _screens = [
       QrPage(brightness: brightness),
       const HistoryPage(),
-      if (hasWatch) const WorkersPage()
+      if (hasWatch) const WorkersPage(),
+      const AppMenu(),
     ];
 
-    
     void _onPageChanged(int i) {
       context.read<CounterProvider>().setData(choceListReset: true);
 
@@ -50,46 +50,68 @@ class _HomePageState extends State<HomePage> {
       _pageController.jumpToPage(selectedIndex);
     }
 
-    return Scaffold(
-      drawerEdgeDragWidth: MediaQuery.of(context).size.width,
-      drawer: const AppMenu(),
-      body: PageView(
-        controller: _pageController,
-        children: _screens,
-        onPageChanged: _onPageChanged,
-        physics: const NeverScrollableScrollPhysics(),
-      ),
-      bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          backgroundColor: const Color(0xff535353),
-          indicatorColor: const Color(0xff363141),
-          labelTextStyle: MaterialStateProperty.all(
-            const TextStyle(color: Colors.white),
-          ),
-          iconTheme: MaterialStateProperty.all(
-            const IconThemeData(color: Colors.white),
-          ),
-        ),
-        child: NavigationBar(
-          onDestinationSelected: _itemTapped,
-          selectedIndex: _curentIndex,
-          destinations: [
-            const NavigationDestination(
-              icon: Icon(Icons.qr_code_2),
-              label: 'QR Code',
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(
+        activeColor: Colors.white,
+        items: [
+          const BottomNavigationBarItem(
+            icon: Icon(
+              Icons.qr_code_2,
             ),
-            const NavigationDestination(
-              icon: Icon(Icons.list),
-              label: 'История',
+            label: 'QR Code',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'История',
+          ),
+          if (hasWatch)
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.group),
+              label: 'Сотрудники',
             ),
-            if (hasWatch)
-              const NavigationDestination(
-                icon: Icon(Icons.group),
-                label: 'Сотрудники',
-              ),
-          ],
-        ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.info_outline),
+            label: 'Информация',
+          ),
+        ],
       ),
+      tabBuilder: (ctx, int) {
+        return _screens[int];
+      },
+
+      // drawer: const AppMenu(),
+      // body: PageView(
+      //   controller: _pageController,
+      //   children: _screens,
+      //   onPageChanged: _onPageChanged,
+      //   physics: const NeverScrollableScrollPhysics(),
+      // ),
+      // bottomNavigationBar: NavigationBarTheme(
+      //   data: NavigationBarThemeData(
+      //     backgroundColor: const Color(0xff535353),
+      //     indicatorColor: const Color(0xff363141),
+      //     labelTextStyle: MaterialStateProperty.all(
+      //       const TextStyle(color: Colors.white),
+      //     ),
+      //     iconTheme: MaterialStateProperty.all(
+      //       const IconThemeData(color: Colors.white),
+      //     ),
+      //   ),
+      //   child: NavigationBar(
+      //     onDestinationSelected: _itemTapped,
+      //     selectedIndex: _curentIndex,
+      //     destinations: [
+      //       const NavigationDestination(
+      //         icon: Icon(Icons.qr_code_2),
+      //         label: 'QR Code',
+      //       ),
+      //       const NavigationDestination(
+      //         icon: Icon(Icons.list),
+      //         label: 'История',
+      //       ),
+
+      //     ],
+      //   ),
     );
   }
 }

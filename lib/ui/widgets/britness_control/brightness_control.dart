@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proweb_qr/ui/widgets/app_menu_item/app_menu_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,8 +51,8 @@ class BrightnessControlState extends State<BrightnessControl> {
             enabledThumbRadius: thumpRadius,
           ),
         ),
-        child: Slider(
-          inactiveColor: const Color(0xff535353),
+        child: CupertinoSlider(
+          
           activeColor: Colors.white,
           value: value,
           min: min,

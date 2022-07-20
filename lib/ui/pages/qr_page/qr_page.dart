@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:proweb_qr/domain/providers/auth_provider/auth_provider.dart';
@@ -26,8 +27,11 @@ class _QrPageState extends State<QrPage> {
           future: model.genQRProweb(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              final _br = snapshot.data?.britness ?? 0.3;
+              double _br = snapshot.data?.britness ?? 0.3;
               const _brKef = .15;
+              if (snapshot.data?.id == 137) {
+                _br = 1;
+              }
               return Opacity(
                 opacity: _br < _brKef ? _brKef : _br,
                 child: Center(
@@ -59,38 +63,38 @@ class _QrPageState extends State<QrPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'QR Code',
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text(
+          'QR CODE',
           style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-            height: 1.18,
+            color: Color.fromRGBO(255, 255, 255, 1),
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        heroTag: 'Generate',
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        elevation: 0,
-        backgroundColor: const Color(0xff535353),
-        onPressed: action,
-        label: const Text('Генерировать'),
-      ),
-      body: const Center(
+      child: Center(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text(
-            'Для создания QR кода нажмите на кнопку "Генерировать"\n\nГенерация QR-кода нужна для того, чтобы вы могли отметиться на приход/уход в PROWEB\n\nВаши данные храняться на сервере PROWEB для проведения статистики и подсчет отработанных часов. Ваши данные могут видеть только Вы и Ваш руководитель',
-            textAlign: TextAlign.justify,
-            style: TextStyle(
-              fontSize: 20,
-              height: 1.15,
-              color: Colors.white,
-            ),
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Для создания QR кода нажмите на кнопку "Генерировать"\n\nГенерация QR-кода нужна для того, чтобы вы могли отметиться на приход/уход в PROWEB\n\nВаши данные храняться на сервере PROWEB для проведения статистики и подсчет отработанных часов. Ваши данные могут видеть только Вы и Ваш руководитель',
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                  fontSize: 20,
+                  height: 1.15,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              CupertinoButton.filled(
+                onPressed: action,
+                child: const Text('Генерировать'),
+              ),
+            ],
           ),
         ),
       ),

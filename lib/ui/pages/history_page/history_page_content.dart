@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -123,9 +124,9 @@ class _ChoseDataPikerBtnState extends State<ChoseDataPikerBtn> {
       _title = 'Выбрать даты';
     }
 
-    return InkWell(
-      onTap: () => getDateRange(context),
-      child: Ink(
+    return CupertinoButton(
+      onPressed: () => getDateRange(context),
+      child: Container(
         padding: const EdgeInsets.symmetric(
           vertical: 26,
           horizontal: 18,
@@ -148,12 +149,12 @@ class _ChoseDataPikerBtnState extends State<ChoseDataPikerBtn> {
             ),
             const Expanded(child: SizedBox()),
             if (model.data.days > 0)
-              InkWell(
+              CupertinoButton(
                 child: const Icon(
                   Icons.close,
                   color: Colors.white,
                 ),
-                onTap: model.close,
+                onPressed: model.close,
               ),
           ],
         ),

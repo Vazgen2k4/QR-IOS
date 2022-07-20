@@ -23,13 +23,10 @@ class HistoryAppBar extends StatelessWidget implements PreferredSizeWidget {
     final model = context.watch<CounterProvider>();
     final days = model.data.days;
 
-    final Color bgColor =
-        days == 0 ? const Color(0xff535353) : const Color(0xff222222);
-
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       height: double.infinity,
-      color: bgColor,
+      color: const Color(0xff535353),
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).padding.top,
         left: 15,
@@ -69,6 +66,8 @@ class _HistoryDaysCounter extends StatelessWidget {
     final Widget _child = days == 0
         ? Text(
             'История: $name',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
@@ -88,20 +87,20 @@ class _HistoryDaysCounter extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (hasPopButton)
-          IconButton(
-            padding: const EdgeInsets.only(right: 10),
-            splashRadius: 20,
-            onPressed: () {
-              model.setData(choceListReset: true);
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-              size: 24,
-            ),
-          ),
+        // if (hasPopButton)
+        //   IconButton(
+        //     padding: const EdgeInsets.only(right: 10),
+        //     splashRadius: 20,
+        //     onPressed: () {
+        //       model.setData(choceListReset: true);
+        //       Navigator.of(context).pop();
+        //     },
+        //     icon: const Icon(
+        //       Icons.arrow_back,
+        //       color: Colors.white,
+        //       size: 24,
+        //     ),
+        //   ),
         _child,
         if (days != 0)
           AnimatedDigitWidget(

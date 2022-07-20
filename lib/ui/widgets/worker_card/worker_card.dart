@@ -24,13 +24,6 @@ class WorkerCard extends StatelessWidget {
           Color.fromRGBO(0, 128, 136, .22),
           Color.fromRGBO(50, 50, 50, 0),
         ]),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black26,
-            offset: Offset(0, 10),
-            blurRadius: 15,
-          ),
-        ],
       ),
       child: ClipRRect(
         child: BackdropFilter(
@@ -41,9 +34,8 @@ class WorkerCard extends StatelessWidget {
               color: const Color.fromRGBO(83, 83, 83, 0.5),
               borderRadius: BorderRadius.circular(6),
             ),
-            child: InkWell(
-              splashColor: const Color(0xff882900),
-              highlightColor: const Color(0xff285659),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 Navigator.of(context).pushNamed(
                   '/history/$id',

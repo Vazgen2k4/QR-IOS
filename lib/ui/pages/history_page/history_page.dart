@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proweb_qr/domain/attendance_api/attedance_api.dart';
@@ -27,12 +28,14 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: context.read<CounterProvider>().onWillPop,
-      child: Scaffold(
-        appBar: HistoryAppBar(
-          name: widget.name ?? '',
-          hasPopButton: widget.hasBackButton,
+      child: CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: HistoryAppBar(
+            name: widget.name ?? '',
+            hasPopButton: widget.hasBackButton,
+          ),
         ),
-        body: FutureBuilder(
+        child: FutureBuilder(
           future: AttedanceApi.getHistory(id: widget.id),
           builder: (context, AsyncSnapshot<History> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
@@ -54,7 +57,10 @@ class _HistoryPageState extends State<HistoryPage> {
               }
               return HistoryPageContent(historyList: _historyList);
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: CupertinoActivityIndicator(
+                color: Color(0xfffffff),
+              ));
             }
           },
         ),

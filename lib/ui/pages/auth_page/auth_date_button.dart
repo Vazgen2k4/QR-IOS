@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:proweb_qr/ui/pages/auth_page/auth_controllers.dart';
@@ -18,14 +19,11 @@ class _AuthDateButtonState extends State<AuthDateButton> {
   Future getDate(BuildContext context) async {
     // print()
 
-    final newDateTime = await showDatePicker(
-      locale: const Locale('ru'),
-      initialDate: DateTime.now(),
-      initialEntryMode: DatePickerEntryMode.calendarOnly,
+    final newDateTime = await showCupertinoModalPopup(
       context: context,
-      firstDate: DateTime(1951, 5, 19),
-      lastDate: DateTime.now(),
-      builder: (context, datePicker) {
+      // firstDate: DateTime(1951, 5, 19),
+      // lastDate: DateTime.now(),
+      builder: (context) {
         Widget _error() {
           return Container(
             alignment: Alignment.center,
@@ -33,26 +31,35 @@ class _AuthDateButtonState extends State<AuthDateButton> {
           );
         }
 
-        
-
-        return Theme(
-          data: ThemeData().copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xff323232),
-            ),
-            scaffoldBackgroundColor: const Color(0xff535353),
+        return Container(
+          height: 250,
+          margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: datePicker ?? _error(),
+          child: CupertinoDatePicker(
+            backgroundColor: Colors.white,
+            mode: CupertinoDatePickerMode.date,
+            onDateTimeChanged: (value) {
+              setState(() {
+                title =
+                    '${value.day < 10 ? '0${value.day}' : value.day}.${value.month < 10 ? '0${value.month}' : value.month}.${value.year}';
+                AuthControllers.bornController.text = title;
+              });
+            },
+          ),
         );
+
+        // return Theme(
+        //   data: ThemeData().copyWith(
+        //     colorScheme: const ColorScheme.light(
+        //       primary: Color(0xff323232),
+        //     ),
+        //     scaffoldBackgroundColor: const Color(0xff535353),
+        //   ),
+        //   child: datePicker ?? _error(),
+        // );
       },
     );
-
-    if (newDateTime != null) {
-      setState(() {
-        title = DateFormat(_dateFormatPatern).format(newDateTime);
-        AuthControllers.bornController.text = title;
-      });
-    }
   }
 
   @override
@@ -63,37 +70,15 @@ class _AuthDateButtonState extends State<AuthDateButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: TextButton(
-        style: ButtonStyle(
-          alignment: Alignment.centerLeft,
-          backgroundColor: MaterialStateProperty.all(AppColors.inputBgColor),
-          padding: MaterialStateProperty.all(
-            const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 15,
-            ),
-          ),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              side: const BorderSide(
-                width: 1,
-                color: AppColors.inputBorderColor,
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        ),
-        onPressed: () => getDate(context),
-        child: Text(
-          title,
-          textAlign: TextAlign.left,
-          style: TextStyle(
-            color: AppColors.whiteColor.withOpacity(0.7),
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            height: 1.18,
-          ),
+    return CupertinoButton.filled(
+      onPressed: () => getDate(context),
+      child: Text(
+        title,
+        textAlign: TextAlign.left,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          height: 1.18,
         ),
       ),
     );

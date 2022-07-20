@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:proweb_qr/ui/widgets/app_menu/app_menu_body.dart';
-import 'package:proweb_qr/ui/widgets/app_menu/app_menu_header.dart';
 
 import '../../../domain/providers/auth_provider/auth_provider.dart';
 
@@ -10,14 +9,20 @@ class AppMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      elevation: 0,
-      child: SafeArea(
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text(
+          'Меню',
+          style: TextStyle(
+            color: Color.fromRGBO(255, 255, 255, 1),
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: const [
-            AppMenuHeader(),
             AppMenuBody(),
             ExitButton(),
           ],
@@ -34,32 +39,15 @@ class ExitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = context.read<AuthProvider>();
 
-    return Ink(
-      width: double.infinity,
-      height: 80,
-      child: FloatingActionButton.extended(
-        heroTag: 'exit',
-        elevation: 0,
-        backgroundColor: const Color(0xff535353),
-        icon: const Icon(Icons.logout_outlined),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0),
-        ),
-        onPressed: () async {
-          await model.logOut();
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            '/',
-            (route) => false,
-          );
-        },
-        label: const Text(
-          'Выход',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
-      ),
+    return CupertinoButton.filled(
+      child: const Text('Выход'),
+      onPressed: () async {
+        await model.logOut();
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          '/',
+          (route) => false,
+        );
+      },
     );
   }
 }

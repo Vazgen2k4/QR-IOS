@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proweb_qr/domain/providers/auth_provider/auth_provider.dart';
@@ -23,13 +24,15 @@ class _AuthPageState extends State<AuthPage> {
       future: model.hasAuth(),
       builder: (context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
+          return const CupertinoPageScaffold(
+            child: Center(
+              child: CupertinoActivityIndicator(
+                color: Colors.white,
+              ),
             ),
           );
         } else {
-          if(!model.hasInternet) {
+          if (!model.hasInternet) {
             return const NotInternetPage();
           }
           if (model.isBaned) {

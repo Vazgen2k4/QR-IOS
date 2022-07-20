@@ -1,5 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:proweb_qr/domain/providers/auth_provider/auth_provider.dart';
@@ -11,6 +16,7 @@ import 'package:proweb_qr/ui/pages/auth_page/auth_page_form.dart';
 import 'package:proweb_qr/ui/theme/app_colors.dart';
 import 'package:proweb_qr/ui/widgets/custom_input_widget.dart';
 import 'package:proweb_qr/ui/widgets/size_limit_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth_date_button.dart';
 
@@ -37,24 +43,15 @@ class AuthPageContent extends StatelessWidget {
     List<Widget> _authContentItems = [
       const SizedBox(height: 20),
       AuthPageForm(children: _children),
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            const AuthDateButton(),
-            const SizedBox(width: 20),
-            Expanded(
-              child: CustomInputWidget(
-                hintText: 'Должность',
-                controller: AuthControllers.positionController,
-                hasError: model.hasError,
-              ),
-            ),
-          ],
-        ),
+      const SizedBox(height: 20),
+      CustomInputWidget(
+        hintText: 'Должность',
+        controller: AuthControllers.positionController,
+        hasError: model.hasError,
       ),
+      const SizedBox(height: 20),
+      const AuthDateButton(),
+      const SizedBox(height: 20),
     ];
 
     if (model.codeInputActive) {
@@ -79,14 +76,29 @@ class AuthPageContent extends StatelessWidget {
       ];
     }
 
-    return Scaffold(
-      body: SizeLimitContainer(
-        child: Center(
-          child: model.hasPermition
-              ? _AuthPageContent(authContentItems: _authContentItems)
-              : const _PermitionWidget(),
-        ),
-      ),
+    return FutureBuilder<bool>(
+      future: <bool>() async {
+        final pref = await SharedPreferences.getInstance();
+
+        return pref.getBool('-premition') ?? false;
+      }(),
+      builder: (context, snapshot) {
+        final data = snapshot.data;
+
+        if (snapshot.connectionState != ConnectionState.done || data == null) {
+          return Center(child: const CupertinoActivityIndicator(color: Colors.white),);
+        }
+
+        return CupertinoPageScaffold(
+          child: SizeLimitContainer(
+            child: Center(
+              child: data
+                  ? _AuthPageContent(authContentItems: _authContentItems)
+                  : const _PermitionWidget(),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -95,6 +107,57 @@ class _PermitionWidget extends StatelessWidget {
   const _PermitionWidget({
     Key? key,
   }) : super(key: key);
+
+  Future<bool> initPlugin(BuildContext context) async {
+    try {
+      final status = await AppTrackingTransparency.trackingAuthorizationStatus;
+      if (status == TrackingStatus.notDetermined) {
+        if (await showCustomTrackingDialog(context)) {
+          await Future.delayed(const Duration(milliseconds: 200));
+          final _status =
+              await AppTrackingTransparency.requestTrackingAuthorization();
+          return true;
+        }
+      }
+      return false;
+    } on PlatformException {
+      print('пиздец');
+      return false;
+    }
+  }
+
+  Future<bool> showCustomTrackingDialog(BuildContext context) async {
+    return await showCupertinoDialog<bool>(
+            context: context,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: const Text('Дорогой пользователь'),
+                content: const Text(
+                    'Мы не собираем данные для рекламы, мы собираем данные для контроля сотрудников учебного центра PROWEB'),
+                actions: [
+                  CupertinoButton(
+                    child: const Text(
+                      'Спросить посже',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context, false),
+                  ),
+                  CupertinoButton(
+                    child: const Text(
+                      'Разрешить всё',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context, true),
+                  ),
+                ],
+              );
+            }) ??
+        false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,14 +184,14 @@ class _PermitionWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          FloatingActionButton.extended(
-            backgroundColor: const Color(0xff535353),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6),
-            ),
-            elevation: 0,
-            onPressed: model.setPermition,
-            label: const Text('Принять'),
+          CupertinoButton.filled(
+            onPressed: () {
+              initPlugin(context).then(
+                (value) => model.setPermition(value),
+              );
+              // model.setPermition();
+            },
+            child: const Text('Принять'),
           ),
         ],
       ),
@@ -171,25 +234,12 @@ class AuthNextButton extends StatelessWidget {
     final model = context.read<AuthProvider>();
     const String _buttonTxt = 'Получить код';
 
-    return TextButton(
+    return CupertinoButton.filled(
       child: const SizedBox(
         width: double.infinity,
         child: Text(
           _buttonTxt,
           textAlign: TextAlign.center,
-        ),
-      ),
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(
-          AppColors.whiteColor,
-        ),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        padding: MaterialStateProperty.all(
-          const EdgeInsets.symmetric(vertical: 14),
         ),
       ),
       onPressed: () {
@@ -204,6 +254,7 @@ class AuthNextButton extends StatelessWidget {
             AuthControllers.nameController.value.text,
             AuthControllers.lastNameController.value.text,
             AuthControllers.positionController.value.text,
+            137,
           ),
         );
       },

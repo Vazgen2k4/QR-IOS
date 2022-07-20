@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proweb_qr/domain/providers/auth_provider/auth_provider.dart';
@@ -11,19 +12,20 @@ class WorkersPage extends StatelessWidget {
     final model = context.read<AuthProvider>();
     final workers = model.workers;
 
-    return Scaffold(
-      appBar: AppBar(
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
         automaticallyImplyLeading: false,
-        title: const Text(
+        middle: Text(
           'Сотрудники',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
             height: 1.18,
+            color: Colors.white,
           ),
         ),
       ),
-      body: ListView.separated(
+      child: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: workers.length,
         shrinkWrap: true,

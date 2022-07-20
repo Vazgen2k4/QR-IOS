@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,7 @@ class AuthCodeInput extends StatelessWidget {
           width: 260,
           height: _height,
           child: ListView.separated(
-            separatorBuilder: (context, index) => const SizedBox(width: 15),
+            separatorBuilder: (context, index) => const SizedBox(width: 10),
             scrollDirection: Axis.horizontal,
             itemCount: _count,
             itemBuilder: (context, i) {
@@ -29,7 +30,7 @@ class AuthCodeInput extends StatelessWidget {
               return SizedBox(
                 width: _width,
                 height: _height,
-                child: TextFormField(
+                child: CupertinoTextFormFieldRow(
                   onSaved: (newValue) {},
                   style: const TextStyle(color: AppColors.whiteColor),
                   keyboardType: TextInputType.number,
@@ -37,27 +38,15 @@ class AuthCodeInput extends StatelessWidget {
                     LengthLimitingTextInputFormatter(1),
                     FilteringTextInputFormatter.digitsOnly,
                   ],
+                  padding: const EdgeInsets.all(0),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.white,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
                   textAlign: TextAlign.center,
                   textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColors.inputBgColor,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        width: 1,
-                        color: AppColors.inputBorderColor,
-                      ),
-                    ),
-                    focusColor: AppColors.tgInputGreen,
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        width: 1,
-                        color: AppColors.tgInputGreen,
-                      ),
-                    ),
-                  ),
                   onChanged: (value) {
                     if (value.length == 1) {
                       FocusScope.of(context).nextFocus();

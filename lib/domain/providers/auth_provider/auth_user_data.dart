@@ -5,6 +5,7 @@ class AuthUserData {
     'Имя',
     'Фамилия',
     'Должность',
+    137,
   );
 
   static int? _id;
@@ -27,6 +28,7 @@ class AuthUserData {
     data.name = pref.getString('_name') ?? 'Имя';
     data.lastName = pref.getString('_lastName') ?? 'Фамилия';
     data.position = pref.getString('_position') ?? 'Должность';
+    data.id = pref.getInt('_id') ?? 137;
 
     return data;
   }
@@ -49,9 +51,11 @@ class AuthUserDataParameters {
     this.name,
     this.lastName,
     this.position,
+    this.id,
   );
 
   String name;
   String lastName;
   String position;
+  int id;
 }
