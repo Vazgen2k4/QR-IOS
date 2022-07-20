@@ -86,7 +86,9 @@ class AuthPageContent extends StatelessWidget {
         final data = snapshot.data;
 
         if (snapshot.connectionState != ConnectionState.done || data == null) {
-          return Center(child: const CupertinoActivityIndicator(color: Colors.white),);
+          return Center(
+            child: const CupertinoActivityIndicator(color: Colors.white),
+          );
         }
 
         return CupertinoPageScaffold(
@@ -133,11 +135,12 @@ class _PermitionWidget extends StatelessWidget {
               return CupertinoAlertDialog(
                 title: const Text('Дорогой пользователь'),
                 content: const Text(
-                    'Мы не собираем данные для рекламы, мы собираем данные для контроля сотрудников учебного центра PROWEB'),
+                  'Мы не собираем данные для рекламы, мы собираем данные для контроля сотрудников учебного центра PROWEB',
+                ),
                 actions: [
                   CupertinoButton(
                     child: const Text(
-                      'Спросить посже',
+                      'Выход',
                       style: TextStyle(
                         color: Colors.black,
                       ),
@@ -146,7 +149,7 @@ class _PermitionWidget extends StatelessWidget {
                   ),
                   CupertinoButton(
                     child: const Text(
-                      'Разрешить всё',
+                      'Продолжить',
                       style: TextStyle(
                         color: Colors.black,
                       ),
