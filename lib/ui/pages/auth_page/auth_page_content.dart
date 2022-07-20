@@ -1,17 +1,5 @@
 
 
-gdfgdfgdfgdfg
-gdfdfg
-dfg
-df
-GrowthDirectionfg
-df
-gd
-fg
-dfg
-
-
-
 
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
@@ -100,7 +88,7 @@ class AuthPageContent extends StatelessWidget {
         final data = snapshot.data;
 
         if (snapshot.connectionState != ConnectionState.done || data == null) {
-          return Center(child: const CupertinoActivityIndicator(color: Colors.white),);
+          return const Center(child: CupertinoActivityIndicator(color: Colors.white),);
         }
 
         return CupertinoPageScaffold(
