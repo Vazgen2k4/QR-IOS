@@ -1,4 +1,18 @@
-// ignore_for_file: prefer_const_constructors
+
+
+gdfgdfgdfgdfg
+gdfdfg
+dfg
+df
+GrowthDirectionfg
+df
+gd
+fg
+dfg
+
+
+
+
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:auto_size_text/auto_size_text.dart';
