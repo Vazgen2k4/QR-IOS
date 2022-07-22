@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:proweb_qr/ui/theme/app_colors.dart';
 
 class CustomInputWidget extends StatelessWidget {
   final TextEditingController controller;

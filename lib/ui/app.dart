@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,20 +10,8 @@ import 'package:proweb_qr/ui/pages/auth_page/auth_page.dart';
 import 'pages/home_page/home_page.dart';
 import 'package:proweb_qr/generated/l10n.dart';
 
-class ProwebQR extends StatefulWidget {
+class ProwebQR extends StatelessWidget {
   const ProwebQR({Key? key}) : super(key: key);
-
-  @override
-  State<ProwebQR> createState() => _ProwebQRState();
-}
-
-class _ProwebQRState extends State<ProwebQR> {
-  
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +25,7 @@ class _ProwebQRState extends State<ProwebQR> {
         statusBarColor: Colors.transparent,
       ),
     );
-    
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>(
@@ -50,29 +35,40 @@ class _ProwebQRState extends State<ProwebQR> {
           create: (_) => CounterProvider(),
         ),
       ],
-      child: CupertinoApp(
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: S.delegate.supportedLocales,
-        theme: const CupertinoThemeData(
-          scaffoldBackgroundColor: Color(0xff323232),
-          primaryColor: Color(0xffffffff),
-          barBackgroundColor: Color(0xff535353),
-          primaryContrastingColor: Color(0xff323232),
-        ),
-        title: 'ProwebQR',
-        routes: {
-          '/': (_) => const AuthPage(),
-          '/home': (_) => const HomePage(),
-        },
-        initialRoute: '/',
-        onGenerateRoute: AppNavigator.generate,
+      child: const _ProwebQRContent(),
+    );
+  }
+}
+
+class _ProwebQRContent extends StatelessWidget {
+  const _ProwebQRContent({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoApp(
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+      theme: const CupertinoThemeData(
+        scaffoldBackgroundColor: Color(0xff323232),
+        primaryColor: Color(0xffffffff),
+        barBackgroundColor: Color(0xff535353),
+        primaryContrastingColor: Color(0xff323232),
       ),
+      title: 'ProwebQR',
+      routes: {
+        '/': (_) => const AuthPage(),
+        '/home': (_) => const HomePage(),
+      },
+      initialRoute: '/',
+      onGenerateRoute: AppNavigator.generate,
     );
   }
 }

@@ -58,9 +58,10 @@ class _HistoryPageState extends State<HistoryPage> {
               return HistoryPageContent(historyList: _historyList);
             } else {
               return const Center(
-                  child: CupertinoActivityIndicator(
-                color: Color(0xfffffff),
-              ));
+                child: CupertinoActivityIndicator(
+                  color: Color(0xffffffff),
+                ),
+              );
             }
           },
         ),

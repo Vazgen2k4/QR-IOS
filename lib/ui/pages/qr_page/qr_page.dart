@@ -14,7 +14,6 @@ class QrPage extends StatefulWidget {
 
 class _QrPageState extends State<QrPage> {
   bool isPressed = false;
-  late final double _brightness;
 
   void action() async {
     await showDialog(
@@ -53,12 +52,6 @@ class _QrPageState extends State<QrPage> {
 
     HapticFeedback.heavyImpact();
     setState(() {});
-  }
-
-  @override
-  void initState() {
-    _brightness = widget.brightness;
-    super.initState();
   }
 
   @override

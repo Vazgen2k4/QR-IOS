@@ -1,12 +1,5 @@
-
-
-
-
-import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:proweb_qr/domain/providers/auth_provider/auth_provider.dart';
@@ -18,8 +11,6 @@ import 'package:proweb_qr/ui/pages/auth_page/auth_page_form.dart';
 import 'package:proweb_qr/ui/theme/app_colors.dart';
 import 'package:proweb_qr/ui/widgets/custom_input_widget.dart';
 import 'package:proweb_qr/ui/widgets/size_limit_container.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'auth_date_button.dart';
 
 class AuthPageContent extends StatelessWidget {
@@ -78,132 +69,17 @@ class AuthPageContent extends StatelessWidget {
       ];
     }
 
-    return FutureBuilder<bool>(
-      future: <bool>() async {
-        final pref = await SharedPreferences.getInstance();
-
-        return pref.getBool('-premition') ?? false;
-      }(),
-      builder: (context, snapshot) {
-        final data = snapshot.data;
-
-        if (snapshot.connectionState != ConnectionState.done || data == null) {
-
-          return const Center(child: CupertinoActivityIndicator(color: Colors.white),);
-
-     
-        }
-
-        return CupertinoPageScaffold(
+    return CupertinoPageScaffold(
           child: SizeLimitContainer(
             child: Center(
-              child: data
-                  ? _AuthPageContent(authContentItems: _authContentItems)
-                  : const _PermitionWidget(),
+              child: _AuthPageContent(authContentItems: _authContentItems)
+                  
             ),
           ),
         );
-      },
-    );
   }
 }
 
-class _PermitionWidget extends StatelessWidget {
-  const _PermitionWidget({
-    Key? key,
-  }) : super(key: key);
-
-  Future<bool> initPlugin(BuildContext context) async {
-    try {
-      final status = await AppTrackingTransparency.trackingAuthorizationStatus;
-      if (status == TrackingStatus.notDetermined) {
-        if (await showCustomTrackingDialog(context)) {
-          await Future.delayed(const Duration(milliseconds: 200));
-          final _status =
-              await AppTrackingTransparency.requestTrackingAuthorization();
-          return true;
-        }
-      }
-      return false;
-    } on PlatformException {
-      print('пиздец');
-      return false;
-    }
-  }
-
-  Future<bool> showCustomTrackingDialog(BuildContext context) async {
-    return await showCupertinoDialog<bool>(
-            context: context,
-            builder: (context) {
-              return CupertinoAlertDialog(
-                title: const Text('Дорогой пользователь'),
-                content: const Text(
-                  'Мы не собираем данные для рекламы, мы собираем данные для контроля сотрудников учебного центра PROWEB',
-                ),
-                actions: [
-                  CupertinoButton(
-                    child: const Text(
-                      'Выход',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                    onPressed: () => Navigator.pop(context, false),
-                  ),
-                  CupertinoButton(
-                    child: const Text(
-                      'Продолжить',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                    onPressed: () => Navigator.pop(context, true),
-                  ),
-                ],
-              );
-            }) ??
-        false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final model = context.watch<AuthProvider>();
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '''Внимание!
-Приложение собирает и хранит сдедующие данные о пользователе:
-1. Ф.И.О.
-2. Должность
-3. Время регистрации на вход в заведение
-4. Время регистрации на уход из заведения
-
-Авторизуясь в приложение, вы даете соглажение на сбор и хранение, а также, при необходимости, передачи информации компанией PROWEB.''',
-            style: TextStyle(
-              color: AppColors.whiteColor.withOpacity(0.7),
-              fontSize: 20,
-              fontWeight: FontWeight.w400,
-              height: 1.18,
-            ),
-          ),
-          const SizedBox(height: 20),
-          CupertinoButton.filled(
-            onPressed: () {
-              initPlugin(context).then(
-                (value) => model.setPermition(value),
-              );
-              // model.setPermition();
-            },
-            child: const Text('Принять'),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _AuthPageContent extends StatelessWidget {
   const _AuthPageContent({

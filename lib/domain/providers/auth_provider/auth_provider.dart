@@ -9,38 +9,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthProvider extends ChangeNotifier {
   // Проверка на подклчение к интернету
   bool _hasInternet = false;
+  bool get hasInternet => _hasInternet;
   // Проверка форм на валидность
   bool _hasError = false;
+  bool get hasError => _hasError;
   // Проверка на блокирование
   bool _isBaned = false;
+  bool get isBaned => _isBaned;
   // Проверка сессии на авторизацию
   bool _hasAuth = false;
   // Доступ на просмотр времени сотрудников
   bool _hasWatch = false;
+  bool get hasWatch => _hasWatch;
   // Активация формы пароля
   bool _codeInputActive = false;
+  bool get codeInputActive => _codeInputActive;
   // Сотрудники для наблюдения
   static List<WorkersList>? _workers = [];
   List<WorkersList> get workers => _workers ?? [];
 
-  bool get hasInternet => _hasInternet;
-  bool get hasError => _hasError;
-  bool get hasWatch => _hasWatch;
-  bool get isBaned => _isBaned;
-  bool get codeInputActive => _codeInputActive;
-
-  bool _hasPermition = false;
-  bool get hasPermition => _hasPermition;
-
-  void setPermition(bool value) async {
-    final pref = await SharedPreferences.getInstance();
-
-    await pref.setBool('-premition', value);
-
-    _hasPermition = value;
-    notifyListeners();
-  }
-
+  
   Future<bool> hasAuth() async {
     // Получение параметров поль-ля с памяти устройства
     final pref = await SharedPreferences.getInstance();
@@ -81,43 +69,45 @@ class AuthProvider extends ChangeNotifier {
     required String born,
     required String position,
   }) async {
-    if (name.isNotEmpty ||
-        lastName.isNotEmpty ||
-        position.isNotEmpty ||
-        born.isNotEmpty) {
-      try {
-        final result = await AttedanceApi.auth(
-          born: born.trim(),
-          lastName: lastName.trim(),
-          name: name.trim(),
-          position: position.trim(),
-        );
-        switch (result.status) {
-          case 200:
-            _isBaned = false;
-            _hasError = false;
-            AuthUserData.setId(result.result?.id);
-            AuthUserData.setParameters(
-              AuthUserDataParameters(
-                  name, lastName, position, result.result?.id ?? 137),
-            );
-            _codeInputActive = true;
-            break;
-          case 423:
-            _isBaned = true;
-            break;
-          case 404:
-            _hasError = true;
-            break;
-          default:
-            _hasError = true;
-        }
+    if (name.isEmpty || lastName.isEmpty || position.isEmpty || born.isEmpty) {
+      _hasError = true;
+      notifyListeners();
+      return;
+    }
 
-        notifyListeners();
-      } catch (e) {
-        _hasError = true;
+    try {
+      final result = await AttedanceApi.auth(
+        born: born.trim(),
+        lastName: lastName.trim(),
+        name: name.trim(),
+        position: position.trim(),
+      );
+      switch (result.status) {
+        case 200:
+          _isBaned = false;
+          _hasError = false;
+          AuthUserData.setId(result.result?.id);
+          AuthUserData.setParameters(
+            AuthUserDataParameters(
+              name,
+              lastName,
+              position,
+              result.result?.id ?? 137,
+            ),
+          );
+          _codeInputActive = true;
+          break;
+        case 423:
+          _isBaned = true;
+          break;
+        case 404:
+          _hasError = true;
+          break;
+        default:
+          _hasError = true;
       }
-    } else {
+      notifyListeners();
+    } catch (e) {
       _hasError = true;
     }
   }
@@ -143,10 +133,6 @@ class AuthProvider extends ChangeNotifier {
 
   Future<DateAuth> genQRProweb() async {
     final pref = await SharedPreferences.getInstance();
-    // await FlutterScreenWake.setBrightness(pref.getDouble('brightness') ?? 0.0);
-
-    // await ScreenBrightness()
-    //     .setScreenBrightness(pref.getDouble('brightness') ?? 0.0);
 
     final britness = pref.getDouble('brightness') ?? 0.0;
 
