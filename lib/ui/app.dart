@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:proweb_qr/domain/providers/auth_provider/auth_provider.dart';
 import 'package:proweb_qr/domain/providers/couter_provider/counter_provider.dart';
+import 'package:proweb_qr/domain/providers/qr_provider/qr_provider.dart';
 import 'package:proweb_qr/ui/app_navigator/app_navigator.dart';
 import 'package:proweb_qr/ui/pages/auth_page/auth_page.dart';
 import 'pages/home_page/home_page.dart';
@@ -33,6 +34,9 @@ class ProwebQR extends StatelessWidget {
         ),
         ChangeNotifierProvider<CounterProvider>(
           create: (_) => CounterProvider(),
+        ),
+        ChangeNotifierProvider<QrProvider>(
+          create: (_) => QrProvider(),
         ),
       ],
       child: const _ProwebQRContent(),

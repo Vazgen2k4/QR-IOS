@@ -69,7 +69,6 @@ class AttedanceApi {
       "id": _id,
       "code": codeTg,
     });
-    
 
     final request = await http.post(
       url,
@@ -78,9 +77,9 @@ class AttedanceApi {
       },
       body: body,
     );
-    
+
     int status = AuthResult.fromJson(jsonDecode(request.body)).status ?? 401;
-  
+
     return status == 200;
   }
 
@@ -100,8 +99,8 @@ class AttedanceApi {
         ? (await AuthUserData.getId()).toString()
         : (id.toString());
 
-    Uri uri = Uri.parse(
-        'https://attendance.proweb.uz/api/attendance-list?page=1');
+    Uri uri =
+        Uri.parse('https://attendance.proweb.uz/api/attendance-list?page=1');
 
     final client = await http.get(uri, headers: {'Authorization': idUser});
 
@@ -121,5 +120,11 @@ class AttedanceApi {
     final request = WorkersRequest.fromJson(json.decode(client.body));
 
     return request.result?.list;
+  }
+
+  static Future youAreGondon() async {
+    Uri url = Uri.parse('https://attendance.proweb.uz/api/screenshot');
+    final idUser = (await AuthUserData.getId()).toString();
+    await http.get(url, headers: {'Authorization': idUser});
   }
 }

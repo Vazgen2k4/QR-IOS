@@ -4,11 +4,13 @@ import 'package:proweb_qr/ui/widgets/history_page_widget/history_time_widget.dar
 class HistoryFooterTimeWidget extends StatelessWidget {
   final String differenceTime;
   final bool isChoce;
-  
+  final IconData icon;
+
   const HistoryFooterTimeWidget({
     Key? key,
     required this.differenceTime,
     required this.isChoce,
+    this.icon = Icons.schedule,
   }) : super(key: key);
 
   @override
@@ -23,7 +25,7 @@ class HistoryFooterTimeWidget extends StatelessWidget {
         Row(children: [
           HistoryTimeWidget(
             isChose: isChoce,
-            icon: Icons.schedule,
+            icon: icon,
             time: differenceTime,
           ),
         ]),

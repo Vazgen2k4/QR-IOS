@@ -1,10 +1,14 @@
 PODS:
-  - "app_settings (3.0.0+1)":
-    - Flutter
   - Flutter (1.0.0)
+  - flutter_fgbg (0.0.1):
+    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - "permission_handler (5.1.0+2)":
+    - Flutter
+  - screenshot_callback (0.0.1):
+    - Flutter
   - secure_application (0.0.1):
     - Flutter
   - shared_preferences_ios (0.0.1):
@@ -12,9 +16,11 @@ PODS:
   - Toast (4.0.0)
 
 DEPENDENCIES:
-  - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - Flutter (from `Flutter`)
+  - flutter_fgbg (from `.symlinks/plugins/flutter_fgbg/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - screenshot_callback (from `.symlinks/plugins/screenshot_callback/ios`)
   - secure_application (from `.symlinks/plugins/secure_application/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
 
@@ -23,21 +29,27 @@ SPEC REPOS:
     - Toast
 
 EXTERNAL SOURCES:
-  app_settings:
-    :path: ".symlinks/plugins/app_settings/ios"
   Flutter:
     :path: Flutter
+  flutter_fgbg:
+    :path: ".symlinks/plugins/flutter_fgbg/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
+  screenshot_callback:
+    :path: ".symlinks/plugins/screenshot_callback/ios"
   secure_application:
     :path: ".symlinks/plugins/secure_application/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
 
 SPEC CHECKSUMS:
-  app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_fgbg: 31c0d1140a131daea2d342121808f6aa0dcd879d
   fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
+  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
+  screenshot_callback: b173e7f4bd8d2ef14a9a5e5a77c0ac6a47578608
   secure_application: 27d424e8c2e770f63e38e280b5a51f921aa9b0c8
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196

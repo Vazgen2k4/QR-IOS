@@ -131,18 +131,6 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<DateAuth> genQRProweb() async {
-    final pref = await SharedPreferences.getInstance();
-
-    final britness = pref.getDouble('brightness') ?? 0.0;
-
-    final qr = await AttedanceApi.getQrCode();
-
-    final json =
-        '{"id":${qr.result?.id},"time":${qr.result?.time},"status":${qr.result?.status}}';
-
-    return DateAuth(britness: britness, json: json, id: qr.result?.id ?? 137);
-  }
 }
 
 class DateAuth {

@@ -1,44 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proweb_qr/domain/providers/qr_provider/qr_provider.dart';
 import 'package:proweb_qr/ui/widgets/app_menu_item/app_menu_item.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class BrightnessControl extends StatefulWidget {
+class BrightnessControl extends StatelessWidget {
   const BrightnessControl({Key? key}) : super(key: key);
 
   @override
-  BrightnessControlState createState() => BrightnessControlState();
-}
-
-class BrightnessControlState extends State<BrightnessControl> {
-  double value = 0;
-  late double deviceBritness;
-
-  final double thumpRadius = 8;
-
-  Future<void> setSettings() async {
-    final pref = await SharedPreferences.getInstance();
-    setState(() {
-      value = pref.getDouble('brightness') ?? 0.0;
-    });
-  }
-
-  void onChangedEnd(double curentValue) async {
-    final pref = await SharedPreferences.getInstance();
-    await pref.setDouble('brightness', curentValue);
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    setSettings();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    const double min = 0.0;
-    const double max = 1.0;
+    final qrModel = context.watch<QrProvider>();
+
+    final min = qrModel.minBritness;
+    final max = qrModel.maxBritness;
+
+    const thumpRadius = 8.0;
+
     return AppMenuItem(
       icon: Icons.light_mode,
       title: 'Яркость QR',
@@ -47,21 +24,18 @@ class BrightnessControlState extends State<BrightnessControl> {
           trackHeight: 3,
           minThumbSeparation: 0,
           overlayShape: SliderComponentShape.noThumb,
-          rangeThumbShape: RoundRangeSliderThumbShape(
+          rangeThumbShape: const RoundRangeSliderThumbShape(
             enabledThumbRadius: thumpRadius,
           ),
         ),
         child: CupertinoSlider(
-          
           activeColor: Colors.white,
-          value: value,
+          value: qrModel.britness < .2 ? .2 : qrModel.britness,
           min: min,
           max: max,
-          onChangeEnd: onChangedEnd,
+          onChangeEnd: (v) => qrModel.setBritness(v),
           onChanged: (newValue) {
-            setState(() {
-              value = newValue;
-            });
+            qrModel.setBritness(newValue);
           },
         ),
       ),

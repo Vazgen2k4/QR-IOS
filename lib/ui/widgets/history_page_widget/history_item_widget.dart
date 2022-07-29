@@ -83,7 +83,12 @@ class HistoryItemWidget extends StatelessWidget {
                     HistoryFooterTimeWidget(
                       differenceTime: difference,
                       isChoce: data.isChoce,
-                    )
+                    ),
+                  HistoryFooterTimeWidget(
+                    differenceTime: data.scanner!,
+                    isChoce: data.isChoce,
+                    icon: Icons.location_on_outlined,
+                  ),
                 ],
               ),
             ),

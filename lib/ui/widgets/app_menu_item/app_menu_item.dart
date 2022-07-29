@@ -18,41 +18,46 @@ class AppMenuItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          SizedBox(
-            width: 50,
-            height: 50,
-            child: Center(
-              child: Icon(
-                icon,
-                size: 24,
-                color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 16),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(
+              width: 50,
+              height: 50,
+              child: Center(
+                child: Icon(
+                  icon,
+                  size: 24,
+                  color: Colors.white,
+                ),
               ),
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  left: thumpRadius,
-                  bottom: 12,
-                ),
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    height: 1.14,
-                    color: Color(0xffd6d6d6),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: thumpRadius,
+                      bottom: 12,
+                    ),
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        height: 1.14,
+                        color: Color(0xffd6d6d6),
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox( width: double.infinity,child: subtitle!),
+                ],
               ),
-              subtitle!,
-            ],
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -149,12 +149,12 @@ class _ChoseDataPikerBtnState extends State<ChoseDataPikerBtn> {
             ),
             const Expanded(child: SizedBox()),
             if (model.data.days > 0)
-              CupertinoButton(
+              GestureDetector(
                 child: const Icon(
                   Icons.close,
                   color: Colors.white,
                 ),
-                onPressed: model.close,
+                onTap: model.close,
               ),
           ],
         ),
